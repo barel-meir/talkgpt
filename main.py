@@ -1,5 +1,6 @@
 import logging
 import os
+import gui
 from analyzer import Analyzer
 
 
@@ -44,7 +45,7 @@ def initialize():
 
 def main():
     initialize()
-    Analyzer.analyze()
+    gui.run()
 
 
 if __name__ == '__main__':

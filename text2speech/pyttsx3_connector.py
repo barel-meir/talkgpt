@@ -1,3 +1,5 @@
+import logging
+
 import pyttsx3
 from exceptions import VoiceNotFoundException
 
@@ -11,7 +13,9 @@ class PyttsxConnector:
 
     @staticmethod
     def _init_engine():
+        logging.debug(f"creating pyttsx3 engine")
         desired_voice = 'english-us'
+        logging.debug(f"desired voice: {desired_voice}")
         # Create a TTS engine
         PyttsxConnector._engine = pyttsx3.init()
         # Set the voice
@@ -22,12 +26,12 @@ class PyttsxConnector:
                 break
 
         if voice_id is None:
-            #     todo add log error
+            logging.error(f"could not find desired voice {desired_voice}")
             raise VoiceNotFoundException.VoiceNotFoundException
 
-        PyttsxConnector._engine.setProperty('voice', voice_id)  # Use the first voice in the list
+        PyttsxConnector._engine.setProperty('voice', voice_id)
         # Set the speech rate
-        PyttsxConnector._engine.setProperty('rate', 150)
+        PyttsxConnector._engine.setProperty('rate', 200)
 
     @staticmethod
     def speak(text: str):

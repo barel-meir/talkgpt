@@ -1,6 +1,7 @@
 import requests
 import logging
 import os
+from text2speech import pyttsx3_connector
 
 
 def create_directory(path):
@@ -40,6 +41,7 @@ def init_logging():
 def request_gpt_answer(message_content: str):
     # Define the API endpoint URL and API key
     try:
+        logging.debug("fetching open ai api key from env")
         api_key = os.environ.get('gptusr')
         if api_key is None:
             raise KeyError
@@ -61,19 +63,27 @@ def request_gpt_answer(message_content: str):
         "Authorization": f"Bearer {api_key}"
     }
 
+    logging.debug(f"sending request payload: {payload}")
     # Send the API request and receive the response
     response = requests.post(url, headers=headers, json=payload)
 
     # Parse the JSON response and extract the generated text
     response_json = response.json()
     generated_text = response_json["choices"][0]["message"]["content"]
+    logging.info(generated_text)
     return generated_text
 
 
-def main():
+def initialize():
     init_logging()
+    pyttsx3_connector.PyttsxConnector.create()
+
+
+def main():
+    initialize()
     message = "Hello, ChatGPT! Can you give me a witty joke?"
-    logging.info(request_gpt_answer(message))
+    answer = request_gpt_answer(message)
+    pyttsx3_connector.PyttsxConnector.speak(answer)
 
 
 if __name__ == '__main__':

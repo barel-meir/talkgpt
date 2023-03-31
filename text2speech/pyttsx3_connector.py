@@ -1,5 +1,4 @@
 import logging
-
 import pyttsx3
 from exceptions import VoiceNotFoundException
 
@@ -32,7 +31,7 @@ class PyttsxConnector:
 
         PyttsxConnector._engine.setProperty('voice', voice_id)
         # Set the speech rate
-        PyttsxConnector._engine.setProperty('rate', 200)
+        PyttsxConnector._engine.setProperty('rate', 185)
 
     @staticmethod
     def speak(text: str):

@@ -1,9 +1,53 @@
 import requests
+import logging
+import os
+
+
+def create_directory(path):
+    """
+    Create a directory path if it doesn't exist.
+    """
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+
+def init_logging():
+    log_file_path = "~/.talkgpt/log"
+    create_directory(log_file_path)
+    log_file_name = "talk.log"
+    file_path = os.path.join(log_file_path, log_file_name)
+
+    # Create a logger and set its level to DEBUG
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+
+    # Create a formatter for the log messages
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    # Create a file handler that writes to the specified log file
+    file_handler = logging.FileHandler(file_path)
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+
+    # Create a console handler that writes to the console
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.DEBUG)
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
+
 
 def request_gpt_answer(message_content: str):
     # Define the API endpoint URL and API key
+    try:
+        api_key = os.environ.get('gptusr')
+        if api_key is None:
+            raise KeyError
+    except KeyError:
+        logging.error("could not find open ai api key")
+        return "(!) Failed to send message"
+
     url = "https://api.openai.com/v1/chat/completions"
-    api_key = "<api-key>>"
 
     # Define the payload to send in the API request
     payload = {
@@ -26,7 +70,12 @@ def request_gpt_answer(message_content: str):
     return generated_text
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+def main():
+    init_logging()
     message = "Hello, ChatGPT! Can you give me a witty joke?"
-    print(request_gpt_answer(message))
+    logging.info(request_gpt_answer(message))
+
+
+if __name__ == '__main__':
+    main()
+

@@ -3,6 +3,7 @@ import logging
 import pyttsx3
 from exceptions import VoiceNotFoundException
 
+
 class PyttsxConnector:
     _engine = None
 

@@ -2,6 +2,7 @@ import logging
 import os
 from openai_connector.chatgpt import request_gpt_answer
 from text2speech import pyttsx3_connector
+from speech2text import speech_recognition_connector
 
 
 def create_directory(path):
@@ -41,13 +42,18 @@ def init_logging():
 def initialize():
     init_logging()
     pyttsx3_connector.PyttsxConnector.create()
+    speech_recognition_connector.SpeechRecognition.create()
 
 
 def main():
     initialize()
-    message = "Hello, ChatGPT! Can you give me a witty joke?"
-    answer = request_gpt_answer(message)
-    pyttsx3_connector.PyttsxConnector.speak(answer)
+    message, is_success = speech_recognition_connector.SpeechRecognition.get_input()
+
+    if is_success:
+        answer = request_gpt_answer(message)
+        pyttsx3_connector.PyttsxConnector.speak(answer)
+    else:
+        pyttsx3_connector.PyttsxConnector.speak(message)
 
 
 if __name__ == '__main__':

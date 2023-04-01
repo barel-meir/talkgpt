@@ -28,5 +28,10 @@ class Analyzer:
 
 
     @staticmethod
-    def text2speech(text):
+    def ask_gpt(text: str):
+        answer = request_gpt_answer(text)
+        return answer
+
+    @staticmethod
+    def text2speech(text: str):
         pyttsx3_connector.PyttsxConnector.speak(text)

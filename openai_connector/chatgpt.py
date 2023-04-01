@@ -9,27 +9,25 @@ class ChatGptConnector:
     _api_key = None
     @staticmethod
     def initialize():
-        global _api_key
         # Define the API endpoint URL and API key
         try:
             logging.debug("fetching open ai api key from env")
             if os.environ.get('gptusr') is None:
                 raise KeyError
             else:
-                _api_key = os.environ.get('gptusr')
+                ChatGptConnector._api_key = os.environ.get('gptusr')
         except KeyError:
             logging.error("could not find open ai api key")
 
 
     @staticmethod
     def is_api_key_initiated():
-        return not(_api_key is None)
+        return not(ChatGptConnector._api_key is None)
 
     @staticmethod
     def set_api_key(api_key: str):
-        global _api_key
         logging.debug("setting open ai api key from user input")
-        _api_key = api_key
+        ChatGptConnector._api_key = api_key
 
 
     @staticmethod
@@ -48,7 +46,7 @@ class ChatGptConnector:
         # Define the headers to send in the API request
         headers = {
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {_api_key}"
+            "Authorization": f"Bearer {ChatGptConnector._api_key}"
         }
 
         logging.debug(f"sending request payload: {payload}")

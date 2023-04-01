@@ -1,6 +1,6 @@
 import logging
 import os
-import gui
+from gui import Gui
 from analyzer import Analyzer
 
 
@@ -45,6 +45,7 @@ def initialize():
 
 def main():
     initialize()
+    gui = Gui()
     gui.run()
 
 

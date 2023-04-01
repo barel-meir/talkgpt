@@ -34,6 +34,10 @@ def request_gpt_answer(message_content: str):
 
     # Parse the JSON response and extract the generated text
     response_json = response.json()
-    generated_text = response_json["choices"][0]["message"]["content"]
-    logging.info(generated_text)
+    if response.status_code == 200:
+        generated_text = response_json["choices"][0]["message"]["content"]
+        logging.info(generated_text)
+    else:
+        generated_text = response_json['error']['message']
+        logging.error(generated_text)
     return generated_text
